@@ -1,13 +1,13 @@
 import { useEffect, useRef } from "react";
 import type { NodeData } from "../../utils/types";
-import styles from './Title.module.css';
+import styles from "./Title.module.css";
 import { nanoid } from "nanoid";
 
 type TitleProps = {
   title: string;
   changePageTitle(title: string): void;
   addNode(node: NodeData, index: number): void;
-}
+};
 
 export const Title = ({ title, changePageTitle, addNode }: TitleProps) => {
   const headerRef = useRef<HTMLHeadingElement>(null);
@@ -21,17 +21,20 @@ export const Title = ({ title, changePageTitle, addNode }: TitleProps) => {
 
   return (
     <div className={styles.container}>
-      <h1 
-        className={styles.title} 
+      <h1
+        className={styles.title}
         contentEditable
         suppressContentEditableWarning
-        onInput={(event) => changePageTitle((event.currentTarget.textContent || ''))}
+        onInput={(event) =>
+          changePageTitle(event.currentTarget.textContent || "")
+        }
         onKeyDown={(event) => {
-          if (event.key === 'Enter') {
-            event.preventDefault()
-            addNode({type: 'text', id: nanoid(), value: ''}, 0)
+          if (event.key === "Enter") {
+            event.preventDefault();
+            addNode({ type: "text", id: nanoid(), value: "" }, 0);
           }
-        }}></h1>
+        }}
+      ></h1>
     </div>
   );
-}
+};

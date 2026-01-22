@@ -1,10 +1,17 @@
-export type NodeType = 'text' | 'image' | 'list' | 'page' | 'heading1' | 'heading2' | 'heading3';
+export type NodeType =
+  | "text"
+  | "image"
+  | "list"
+  | "page"
+  | "heading1"
+  | "heading2"
+  | "heading3";
 
-export type NodeData =  {
+export type NodeData = {
   id: string;
   type: NodeType;
   value: string;
-}
+};
 
 export type Page = {
   id: string;
@@ -12,5 +19,4 @@ export type Page = {
   title: string;
   nodes: NodeData[];
   cover: string;
-}
-
+};
