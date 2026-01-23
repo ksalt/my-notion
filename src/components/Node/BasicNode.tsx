@@ -1,7 +1,7 @@
 import { useRef, useEffect } from "react";
 import type { FormEventHandler, KeyboardEventHandler } from "react";
 import type { NodeData } from "../../utils/types";
-import styles from "./BasicNode.module.css";
+import styles from "./Node.module.css";
 import { nanoid } from "nanoid";
 
 type BasicNodeProps = {
