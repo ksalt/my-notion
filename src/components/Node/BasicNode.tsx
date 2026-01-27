@@ -1,17 +1,15 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, use } from "react";
 import type { FormEventHandler, KeyboardEventHandler } from "react";
 import type { NodeData } from "../../utils/types";
 import styles from "./Node.module.css";
 import { nanoid } from "nanoid";
+import { useAppState } from "../../state/AppStateContext";
 
 type BasicNodeProps = {
   node: NodeData;
   updateFocusedIndex(index: number): void;
   isFocused: boolean;
   index: number;
-  addNode(node: NodeData, index: number): void;
-  removeNodeByIndex(index: number): void;
-  changeNodeValue(index: number, value: string): void;
 };
 
 export const BasicNode = ({
@@ -19,11 +17,11 @@ export const BasicNode = ({
   updateFocusedIndex,
   isFocused,
   index,
-  addNode,
-  removeNodeByIndex,
-  changeNodeValue,
 }: BasicNodeProps) => {
+  const { addNode, removeNodeByIndex, changeNodeValue } = useAppState();
+
   const nodeRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     if (isFocused) {
       nodeRef.current?.focus();
