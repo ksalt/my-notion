@@ -1,9 +1,11 @@
-import { useRef, useEffect, use } from "react";
+import { useRef, useEffect } from "react";
 import type { FormEventHandler, KeyboardEventHandler } from "react";
-import type { NodeData } from "../../utils/types";
+import type { NodeData, NodeType } from "../../utils/types";
 import styles from "./Node.module.css";
 import { nanoid } from "nanoid";
 import { useAppState } from "../../state/AppStateContext";
+import { CommandPanel } from "./CommandPanel";
+import cx from "classnames";
 
 type BasicNodeProps = {
   node: NodeData;
@@ -18,9 +20,12 @@ export const BasicNode = ({
   isFocused,
   index,
 }: BasicNodeProps) => {
-  const { addNode, removeNodeByIndex, changeNodeValue } = useAppState();
+  const { addNode, removeNodeByIndex, changeNodeValue, changeNodeType } =
+    useAppState();
 
   const nodeRef = useRef<HTMLDivElement>(null);
+
+  const showCommandPanel = isFocused && node?.value?.match(/^\//);
 
   useEffect(() => {
     if (isFocused) {
@@ -35,6 +40,13 @@ export const BasicNode = ({
       nodeRef.current.textContent = node.value;
     }
   }, [node]);
+
+  const parseCommand = (nodeType: NodeType) => {
+    if (nodeRef.current) {
+      changeNodeType(index, nodeType);
+      nodeRef.current.textContent = "";
+    }
+  };
 
   const handleInput: FormEventHandler<HTMLDivElement> = ({ currentTarget }) => {
     const { textContent } = currentTarget;
@@ -69,14 +81,19 @@ export const BasicNode = ({
   };
 
   return (
-    <div
-      onInput={handleInput}
-      onClick={handleClick}
-      onKeyDown={handleKeyDown}
-      ref={nodeRef}
-      contentEditable
-      suppressContentEditableWarning
-      className={styles.node}
-    />
+    <>
+      {showCommandPanel && (
+        <CommandPanel selectItem={parseCommand} nodeText={node.value} />
+      )}
+      <div
+        onInput={handleInput}
+        onClick={handleClick}
+        onKeyDown={handleKeyDown}
+        ref={nodeRef}
+        contentEditable
+        suppressContentEditableWarning
+        className={cx(styles.node, styles[node.type])}
+      />
+    </>
   );
 };
